@@ -33,7 +33,7 @@ open class HorizontalBarHighlighter: BarHighlighter
 
         return high
     }
-    
+
     internal override func buildHighlights(
         dataSet set: IChartDataSet,
         dataSetIndex: Int,
@@ -41,7 +41,7 @@ open class HorizontalBarHighlighter: BarHighlighter
         rounding: ChartDataSetRounding) -> [Highlight]
     {
         guard let chart = self.chart as? BarLineScatterCandleBubbleChartDataProvider else { return [] }
-        
+
         var entries = set.entriesForXValue(xValue)
         if entries.count == 0, let closest = set.entryForXValue(xValue, closestToY: .nan, rounding: rounding)
         {
@@ -55,7 +55,7 @@ open class HorizontalBarHighlighter: BarHighlighter
             return Highlight(x: e.x, y: e.y, xPx: px.x, yPx: px.y, dataSetIndex: dataSetIndex, axis: set.axisDependency)
         }
     }
-    
+
     internal override func getDistance(x1: CGFloat, y1: CGFloat, x2: CGFloat, y2: CGFloat) -> CGFloat
     {
         return abs(y1 - y2)

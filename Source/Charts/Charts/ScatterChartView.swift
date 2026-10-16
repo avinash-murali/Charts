@@ -18,14 +18,14 @@ open class ScatterChartView: BarLineChartViewBase, ScatterChartDataProvider
     open override func initialize()
     {
         super.initialize()
-        
+
         renderer = ScatterChartRenderer(dataProvider: self, animator: _animator, viewPortHandler: _viewPortHandler)
 
         xAxis.spaceMin = 0.5
         xAxis.spaceMax = 0.5
     }
-    
+
     // MARK: - ScatterChartDataProvider
-    
+
     open var scatterData: ScatterChartData? { return _data as? ScatterChartData }
 }

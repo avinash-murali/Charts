@@ -10,6 +10,7 @@
 //
 
 import Foundation
+import QuartzCore
 import CoreGraphics
 
 open class AnimatedViewPortJob: ViewPortJob
@@ -17,14 +18,14 @@ open class AnimatedViewPortJob: ViewPortJob
     internal var phase: CGFloat = 1.0
     internal var xOrigin: CGFloat = 0.0
     internal var yOrigin: CGFloat = 0.0
-    
+
     private var _startTime: TimeInterval = 0.0
     private var _displayLink: NSUIDisplayLink!
     private var _duration: TimeInterval = 0.0
     private var _endTime: TimeInterval = 0.0
-    
+
     private var _easing: ChartEasingFunctionBlock?
-    
+
     @objc public init(
         viewPortHandler: ViewPortHandler,
         xValue: Double,
@@ -41,35 +42,35 @@ open class AnimatedViewPortJob: ViewPortJob
             yValue: yValue,
             transformer: transformer,
             view: view)
-        
+
         self.xOrigin = xOrigin
         self.yOrigin = yOrigin
         self._duration = duration
         self._easing = easing
     }
-    
+
     deinit
     {
         stop(finish: false)
     }
-    
+
     open override func doJob()
     {
         start()
     }
-    
+
     @objc open func start()
     {
         _startTime = CACurrentMediaTime()
         _endTime = _startTime + _duration
         _endTime = _endTime > _endTime ? _endTime : _endTime
-        
+
         updateAnimationPhase(_startTime)
-        
+
         _displayLink = NSUIDisplayLink(target: self, selector: #selector(animationLoop))
         _displayLink.add(to: .main, forMode: RunLoop.Mode.common)
     }
-    
+
     @objc open func stop(finish: Bool)
     {
         guard _displayLink != nil else { return }
@@ -88,7 +89,7 @@ open class AnimatedViewPortJob: ViewPortJob
             animationEnd()
         }
     }
-    
+
     private func updateAnimationPhase(_ currentTime: TimeInterval)
     {
         let elapsedTime = currentTime - _startTime
@@ -99,26 +100,26 @@ open class AnimatedViewPortJob: ViewPortJob
 
         phase = CGFloat(_easing?(elapsed, duration) ?? elapsed / duration)
     }
-    
+
     @objc private func animationLoop()
     {
         let currentTime: TimeInterval = CACurrentMediaTime()
-        
+
         updateAnimationPhase(currentTime)
-        
+
         animationUpdate()
-        
+
         if currentTime >= _endTime
         {
             stop(finish: true)
         }
     }
-    
+
     internal func animationUpdate()
     {
        // Override this
     }
-    
+
     internal func animationEnd()
     {
         // Override this

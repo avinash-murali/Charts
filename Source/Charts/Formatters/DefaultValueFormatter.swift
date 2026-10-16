@@ -19,11 +19,11 @@ open class DefaultValueFormatter: NSObject, IValueFormatter
         _ entry: ChartDataEntry,
         _ dataSetIndex: Int,
         _ viewPortHandler: ViewPortHandler?) -> String
-    
+
     @objc open var block: Block?
-    
+
     @objc open var hasAutoDecimals: Bool = false
-    
+
     private var _formatter: NumberFormatter?
     @objc open var formatter: NumberFormatter?
     {
@@ -34,7 +34,7 @@ open class DefaultValueFormatter: NSObject, IValueFormatter
             _formatter = newValue
         }
     }
-    
+
     private var _decimals: Int?
     open var decimals: Int?
     {
@@ -42,7 +42,7 @@ open class DefaultValueFormatter: NSObject, IValueFormatter
         set
         {
             _decimals = newValue
-            
+
             if let digits = newValue
             {
                 self.formatter?.minimumFractionDigits = digits
@@ -51,44 +51,44 @@ open class DefaultValueFormatter: NSObject, IValueFormatter
             }
         }
     }
-    
+
     public override init()
     {
         super.init()
-        
+
         self.formatter = NumberFormatter()
         hasAutoDecimals = true
     }
-    
+
     @objc public init(formatter: NumberFormatter)
     {
         super.init()
-        
+
         self.formatter = formatter
     }
-    
+
     @objc public init(decimals: Int)
     {
         super.init()
-        
+
         self.formatter = NumberFormatter()
         self.formatter?.usesGroupingSeparator = true
         self.decimals = decimals
         hasAutoDecimals = true
     }
-    
+
     @objc public init(block: @escaping Block)
     {
         super.init()
-        
+
         self.block = block
     }
-    
+
     @objc public static func with(block: @escaping Block) -> DefaultValueFormatter?
     {
         return DefaultValueFormatter(block: block)
     }
-    
+
     open func stringForValue(_ value: Double,
                              entry: ChartDataEntry,
                              dataSetIndex: Int,

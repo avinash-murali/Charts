@@ -17,41 +17,41 @@ open class Highlight: NSObject
 {
     /// the x-value of the highlighted value
     fileprivate var _x = Double.nan
-    
+
     /// the y-value of the highlighted value
     fileprivate var _y = Double.nan
-    
+
     /// the x-pixel of the highlight
     private var _xPx = CGFloat.nan
-    
+
     /// the y-pixel of the highlight
     private var _yPx = CGFloat.nan
-    
+
     /// the index of the data object - in case it refers to more than one
     @objc open var dataIndex = Int(-1)
-    
+
     /// the index of the dataset the highlighted value is in
     fileprivate var _dataSetIndex = Int(0)
-    
+
     /// index which value of a stacked bar entry is highlighted
-    /// 
+    ///
     /// **default**: -1
     fileprivate var _stackIndex = Int(-1)
-    
+
     /// the axis the highlighted value belongs to
     private var _axis: YAxis.AxisDependency = YAxis.AxisDependency.left
-    
+
     /// the x-position (pixels) on which this highlight object was last drawn
     @objc open var drawX: CGFloat = 0.0
-    
+
     /// the y-position (pixels) on which this highlight object was last drawn
     @objc open var drawY: CGFloat = 0.0
-    
+
     public override init()
     {
         super.init()
     }
-    
+
     /// - Parameters:
     ///   - x: the x-value of the highlighted value
     ///   - y: the y-value of the highlighted value
@@ -70,7 +70,7 @@ open class Highlight: NSObject
         axis: YAxis.AxisDependency)
     {
         super.init()
-        
+
         _x = x
         _y = y
         _xPx = xPx
@@ -80,7 +80,7 @@ open class Highlight: NSObject
         _stackIndex = stackIndex
         _axis = axis
     }
-    
+
     /// - Parameters:
     ///   - x: the x-value of the highlighted value
     ///   - y: the y-value of the highlighted value
@@ -102,7 +102,7 @@ open class Highlight: NSObject
                   stackIndex: stackIndex,
                   axis: axis)
     }
-    
+
     /// - Parameters:
     ///   - x: the x-value of the highlighted value
     ///   - y: the y-value of the highlighted value
@@ -119,7 +119,7 @@ open class Highlight: NSObject
         axis: YAxis.AxisDependency)
     {
         super.init()
-        
+
         _x = x
         _y = y
         _xPx = xPx
@@ -127,7 +127,7 @@ open class Highlight: NSObject
         _dataSetIndex = dataSetIndex
         _axis = axis
     }
-    
+
     /// - Parameters:
     ///   - x: the x-value of the highlighted value
     ///   - y: the y-value of the highlighted value
@@ -140,7 +140,7 @@ open class Highlight: NSObject
         _dataSetIndex = dataSetIndex
         self.dataIndex = dataIndex
     }
-    
+
     /// - Parameters:
     ///   - x: the x-value of the highlighted value
     ///   - dataSetIndex: the index of the DataSet the highlighted value belongs to
@@ -150,7 +150,7 @@ open class Highlight: NSObject
         self.init(x: x, y: Double.nan, dataSetIndex: dataSetIndex)
         _stackIndex = stackIndex
     }
-    
+
     @objc open var x: Double { return _x }
     @objc open var y: Double { return _y }
     @objc open var xPx: CGFloat { return _xPx }
@@ -158,16 +158,16 @@ open class Highlight: NSObject
     @objc open var dataSetIndex: Int { return _dataSetIndex }
     @objc open var stackIndex: Int { return _stackIndex }
     @objc open var axis: YAxis.AxisDependency { return _axis }
-    
+
     @objc open var isStacked: Bool { return _stackIndex >= 0 }
-    
+
     /// Sets the x- and y-position (pixels) where this highlight was last drawn.
     @objc open func setDraw(x: CGFloat, y: CGFloat)
     {
         self.drawX = x
         self.drawY = y
     }
-    
+
     /// Sets the x- and y-position (pixels) where this highlight was last drawn.
     @objc open func setDraw(pt: CGPoint)
     {
@@ -176,7 +176,7 @@ open class Highlight: NSObject
     }
 
     // MARK: NSObject
-    
+
     open override var description: String
     {
         return "Highlight, x: \(_x), y: \(_y), dataIndex (combined charts): \(dataIndex), dataSetIndex: \(_dataSetIndex), stackIndex (only stacked barentry): \(_stackIndex)"

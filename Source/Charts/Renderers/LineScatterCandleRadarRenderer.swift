@@ -19,7 +19,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer
     {
         super.init(animator: animator, viewPortHandler: viewPortHandler)
     }
-    
+
     /// Draws vertical & horizontal highlight-lines if enabled.
     /// :param: context
     /// :param: points
@@ -27,7 +27,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer
     /// :param: vertical
     @objc open func drawHighlightLines(context: CGContext, point: CGPoint, set: ILineScatterCandleRadarChartDataSet)
     {
-        
+
         // draw vertical highlight lines
         if set.isVerticalHighlightIndicatorEnabled
         {
@@ -36,7 +36,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer
             context.addLine(to: CGPoint(x: point.x, y: viewPortHandler.contentBottom))
             context.strokePath()
         }
-        
+
         // draw horizontal highlight lines
         if set.isHorizontalHighlightIndicatorEnabled
         {

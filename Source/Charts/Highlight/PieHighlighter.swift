@@ -21,7 +21,7 @@ open class PieHighlighter: PieRadarHighlighter
             let set = chart?.data?.dataSets[0],
             let entry = set.entryForIndex(index)
             else { return nil }
-                
+
         return Highlight(x: Double(index), y: entry.y, xPx: x, yPx: y, dataSetIndex: 0, axis: set.axisDependency)
     }
 }

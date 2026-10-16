@@ -1,6 +1,7 @@
 import Foundation
+import QuartzCore
 
-/** This file provides a thin abstraction layer atop of UIKit (iOS, tvOS) and Cocoa (OS X). The two APIs are very much 
+/** This file provides a thin abstraction layer atop of UIKit (iOS, tvOS) and Cocoa (OS X). The two APIs are very much
  alike, and for the chart library's usage of the APIs it is often sufficient to typealias one to the other. The NSUI*
  types are aliased to either their UI* implementation (on iOS) or their NS* implementation (on OS X). */
 #if os(iOS) || os(tvOS)
@@ -256,10 +257,10 @@ public class NSUIDisplayLink
             CVDisplayLinkSetOutputCallback(displayLink!, { (displayLink, inNow, inOutputTime, flagsIn, flagsOut, userData) -> CVReturn in
 
                 let _self = unsafeBitCast(userData, to: NSUIDisplayLink.self)
-                    
+
                 _self._timestamp = CFAbsoluteTimeGetCurrent()
                 _self._target?.performSelector(onMainThread: _self._selector, with: _self, waitUntilDone: false)
-                    
+
                 return kCVReturnSuccess
                 }, Unmanaged.passUnretained(self).toOpaque())
         }

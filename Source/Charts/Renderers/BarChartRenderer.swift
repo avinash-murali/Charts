@@ -10,6 +10,9 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 import CoreGraphics
 
 open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
@@ -40,19 +43,19 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
     {
         var rects = [CGRect]()
     }
-    
+
     @objc open weak var dataProvider: BarChartDataProvider?
-    
+
     @objc public init(dataProvider: BarChartDataProvider, animator: Animator, viewPortHandler: ViewPortHandler)
     {
         super.init(animator: animator, viewPortHandler: viewPortHandler)
-        
+
         self.dataProvider = dataProvider
     }
-    
+
     // [CGRect] per dataset
     private var _buffers = [Buffer]()
-    
+
     open override func initBuffers()
     {
         if let barData = dataProvider?.barData
@@ -69,7 +72,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                     _buffers.removeLast()
                 }
             }
-            
+
             for i in stride(from: 0, to: barData.dataSetCount, by: 1)
             {
                 let set = barData.dataSets[i] as! IBarChartDataSet
@@ -85,31 +88,31 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             _buffers.removeAll()
         }
     }
-    
+
     private func prepareBuffer(dataSet: IBarChartDataSet, index: Int)
     {
         guard
             let dataProvider = dataProvider,
             let barData = dataProvider.barData
             else { return }
-        
+
         let barWidthHalf = barData.barWidth / 2.0
-    
+
         let buffer = _buffers[index]
         var bufferIndex = 0
         let containsStacks = dataSet.isStacked
-        
+
         let isInverted = dataProvider.isInverted(axis: dataSet.axisDependency)
         let phaseY = animator.phaseY
         var barRect = CGRect()
         var x: Double
         var y: Double
 
-        
+
         for i in stride(from: 0, to: min(Int(ceil(Double(dataSet.entryCount) * animator.phaseX)), dataSet.entryCount), by: 1)
         {
             guard let e = dataSet.entryForIndex(i) as? BarChartDataEntry else { continue }
-            
+
             let vals = e.yValues
 
             x = e.x
@@ -125,7 +128,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 var bottom = isInverted
                     ? (y >= 0.0 ? CGFloat(y) : 0)
                     : (y <= 0.0 ? CGFloat(y) : 0)
-                
+
                 /* When drawing each bar, the renderer actually draws each bar from 0 to the required value.
                  * This drawn bar is then clipped to the visible chart rect in BarLineChartViewBase's draw(rect:) using clipDataToContent.
                  * While this works fine when calculating the bar rects for drawing, it causes the accessibilityFrames to be oversized in some cases.
@@ -223,12 +226,12 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 var posY = 0.0
                 var negY = -e.negativeSum
                 var yStart = 0.0
-                
+
                 // fill the stack
                 for k in 0 ..< vals!.count
                 {
                     let value = vals![k]
-                    
+
                     if value == 0.0 && (posY == 0.0 || negY == 0.0)
                     {
                         // Take care of the situation of a 0.0 value, which overlaps a non-zero bar
@@ -247,7 +250,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                         yStart = negY + abs(value)
                         negY += abs(value)
                     }
-                    
+
                     let left = CGFloat(x - barWidthHalf)
                     let right = CGFloat(x + barWidthHalf)
                     var top = isInverted
@@ -256,16 +259,16 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                     var bottom = isInverted
                         ? (y >= yStart ? CGFloat(y) : CGFloat(yStart))
                         : (y <= yStart ? CGFloat(y) : CGFloat(yStart))
-                    
+
                     // multiply the height of the rect with the phase
                     top *= CGFloat(phaseY)
                     bottom *= CGFloat(phaseY)
-                    
+
                     barRect.origin.x = left
                     barRect.size.width = right - left
                     barRect.origin.y = top
                     barRect.size.height = bottom - top
-                    
+
                     buffer.rects[bufferIndex] = barRect
                     bufferIndex += 1
                 }
@@ -279,7 +282,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             let dataProvider = dataProvider,
             let barData = dataProvider.barData
             else { return }
-        
+
         // If we redraw the data, remove and repopulate accessible elements to update label values and frames
         accessibleChartElements.removeAll()
         accessibilityOrderedElements = accessibilityCreateEmptyOrderedElements()
@@ -296,14 +299,14 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         for i in 0 ..< barData.dataSetCount
         {
             guard let set = barData.getDataSetByIndex(i) else { continue }
-            
+
             if set.isVisible
             {
                 if !(set is IBarChartDataSet)
                 {
                     fatalError("Datasets for BarChartRenderer must conform to IBarChartDataset")
                 }
-                
+
                 drawDataSet(context: context, dataSet: set as! IBarChartDataSet, index: i)
             }
         }
@@ -327,73 +330,73 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         let borderWidth = dataSet.barBorderWidth
         let borderColor = dataSet.barBorderColor
         let drawBorder = borderWidth > 0.0
-        
+
         context.saveGState()
-        
+
         // draw the bar shadow before the values
         if dataProvider.isDrawBarShadowEnabled
         {
             guard let barData = dataProvider.barData else { return }
-            
+
             let barWidth = barData.barWidth
             let barWidthHalf = barWidth / 2.0
             var x: Double = 0.0
-            
+
             for i in stride(from: 0, to: min(Int(ceil(Double(dataSet.entryCount) * animator.phaseX)), dataSet.entryCount), by: 1)
             {
                 guard let e = dataSet.entryForIndex(i) as? BarChartDataEntry else { continue }
-                
+
                 x = e.x
-                
+
                 _barShadowRectBuffer.origin.x = CGFloat(x - barWidthHalf)
                 _barShadowRectBuffer.size.width = CGFloat(barWidth)
-                
+
                 trans.rectValueToPixel(&_barShadowRectBuffer)
-                
+
                 if !viewPortHandler.isInBoundsLeft(_barShadowRectBuffer.origin.x + _barShadowRectBuffer.size.width)
                 {
                     continue
                 }
-                
+
                 if !viewPortHandler.isInBoundsRight(_barShadowRectBuffer.origin.x)
                 {
                     break
                 }
-                
+
                 _barShadowRectBuffer.origin.y = viewPortHandler.contentTop
                 _barShadowRectBuffer.size.height = viewPortHandler.contentHeight
-                
+
                 context.setFillColor(dataSet.barShadowColor.cgColor)
                 context.fill(_barShadowRectBuffer)
             }
         }
 
         let buffer = _buffers[index]
-        
+
         // draw the bar shadow before the values
         if dataProvider.isDrawBarShadowEnabled
         {
             for j in stride(from: 0, to: buffer.rects.count, by: 1)
             {
                 let barRect = buffer.rects[j]
-                
+
                 if (!viewPortHandler.isInBoundsLeft(barRect.origin.x + barRect.size.width))
                 {
                     continue
                 }
-                
+
                 if (!viewPortHandler.isInBoundsRight(barRect.origin.x))
                 {
                     break
                 }
-                
+
                 context.setFillColor(dataSet.barShadowColor.cgColor)
                 context.fill(barRect)
             }
         }
-        
+
         let isSingleColor = dataSet.colors.count == 1
-        
+
         if isSingleColor
         {
             context.setFillColor(dataSet.color(atIndex: 0).cgColor)
@@ -411,20 +414,20 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             {
                 continue
             }
-            
+
             if (!viewPortHandler.isInBoundsRight(barRect.origin.x))
             {
                 break
             }
-            
+
             if !isSingleColor
             {
                 // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
                 context.setFillColor(dataSet.color(atIndex: j).cgColor)
             }
-            
+
             context.fill(barRect)
-            
+
             if drawBorder
             {
                 context.setStrokeColor(borderColor.cgColor)
@@ -447,10 +450,10 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 accessibilityOrderedElements[j/stackSize].append(element)
             }
         }
-        
+
         context.restoreGState()
     }
-    
+
     open func prepareBarHighlight(
         x: Double,
           y1: Double,
@@ -463,12 +466,12 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
         let right = x + barWidthHalf
         let top = y1
         let bottom = y2
-        
+
         rect.origin.x = CGFloat(left)
         rect.origin.y = CGFloat(top)
         rect.size.width = CGFloat(right - left)
         rect.size.height = CGFloat(bottom - top)
-        
+
         trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
     }
 
@@ -488,62 +491,62 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             var posOffset: CGFloat
             var negOffset: CGFloat
             let drawValueAboveBar = dataProvider.isDrawValueAboveBarEnabled
-            
+
             for dataSetIndex in 0 ..< barData.dataSetCount
             {
                 guard let
                     dataSet = dataSets[dataSetIndex] as? IBarChartDataSet,
                     shouldDrawValues(forDataSet: dataSet)
                     else { continue }
-                
+
                 let isInverted = dataProvider.isInverted(axis: dataSet.axisDependency)
-                
+
                 // calculate the correct offset depending on the draw position of the value
                 let valueFont = dataSet.valueFont
                 let valueTextHeight = valueFont.lineHeight
                 posOffset = (drawValueAboveBar ? -(valueTextHeight + valueOffsetPlus) : valueOffsetPlus)
                 negOffset = (drawValueAboveBar ? valueOffsetPlus : -(valueTextHeight + valueOffsetPlus))
-                
+
                 if isInverted
                 {
                     posOffset = -posOffset - valueTextHeight
                     negOffset = -negOffset - valueTextHeight
                 }
-                
+
                 let buffer = _buffers[dataSetIndex]
-                
+
                 guard let formatter = dataSet.valueFormatter else { continue }
-                
+
                 let trans = dataProvider.getTransformer(forAxis: dataSet.axisDependency)
-                
+
                 let phaseY = animator.phaseY
-                
+
                 let iconsOffset = dataSet.iconsOffset
-        
+
                 // if only single values are drawn (sum)
                 if !dataSet.isStacked
                 {
                     for j in 0 ..< Int(ceil(Double(dataSet.entryCount) * animator.phaseX))
                     {
                         guard let e = dataSet.entryForIndex(j) as? BarChartDataEntry else { continue }
-                        
+
                         let rect = buffer.rects[j]
-                        
+
                         let x = rect.origin.x + rect.size.width / 2.0
-                        
+
                         if !viewPortHandler.isInBoundsRight(x)
                         {
                             break
                         }
-                        
+
                         if !viewPortHandler.isInBoundsY(rect.origin.y)
                             || !viewPortHandler.isInBoundsLeft(x)
                         {
                             continue
                         }
-                        
+
                         let val = e.y
-                        
+
                         if dataSet.isDrawValuesEnabled
                         {
                             drawValue(
@@ -561,17 +564,17 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                 align: .center,
                                 color: dataSet.valueTextColorAt(j))
                         }
-                        
+
                         if let icon = e.icon, dataSet.isDrawIconsEnabled
                         {
                             var px = x
                             var py = val >= 0.0
                                 ? (rect.origin.y + posOffset)
                                 : (rect.origin.y + rect.size.height + negOffset)
-                            
+
                             px += iconsOffset.x
                             py += iconsOffset.y
-                            
+
                             ChartUtils.drawImage(
                                 context: context,
                                 image: icon,
@@ -584,19 +587,19 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 else
                 {
                     // if we have stacks
-                    
+
                     var bufferIndex = 0
-                    
+
                     for index in 0 ..< Int(ceil(Double(dataSet.entryCount) * animator.phaseX))
                     {
                         guard let e = dataSet.entryForIndex(index) as? BarChartDataEntry else { continue }
-                        
+
                         let vals = e.yValues
-                        
+
                         let rect = buffer.rects[bufferIndex]
-                        
+
                         let x = rect.origin.x + rect.size.width / 2.0
-                        
+
                         // we still draw stacked bars, but there is one non-stacked in between
                         if vals == nil
                         {
@@ -604,13 +607,13 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                             {
                                 break
                             }
-                            
+
                             if !viewPortHandler.isInBoundsY(rect.origin.y)
                                 || !viewPortHandler.isInBoundsLeft(x)
                             {
                                 continue
                             }
-                            
+
                             if dataSet.isDrawValuesEnabled
                             {
                                 drawValue(
@@ -627,16 +630,16 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                     align: .center,
                                     color: dataSet.valueTextColorAt(index))
                             }
-                            
+
                             if let icon = e.icon, dataSet.isDrawIconsEnabled
                             {
                                 var px = x
                                 var py = rect.origin.y +
                                     (e.y >= 0 ? posOffset : negOffset)
-                                
+
                                 px += iconsOffset.x
                                 py += iconsOffset.y
-                                
+
                                 ChartUtils.drawImage(
                                     context: context,
                                     image: icon,
@@ -648,18 +651,18 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                         else
                         {
                             // draw stack values
-                            
+
                             let vals = vals!
                             var transformed = [CGPoint]()
-                            
+
                             var posY = 0.0
                             var negY = -e.negativeSum
-                            
+
                             for k in 0 ..< vals.count
                             {
                                 let value = vals[k]
                                 var y: Double
-                                
+
                                 if value == 0.0 && (posY == 0.0 || negY == 0.0)
                                 {
                                     // Take care of the situation of a 0.0 value, which overlaps a non-zero bar
@@ -675,28 +678,28 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                     y = negY
                                     negY -= value
                                 }
-                                
+
                                 transformed.append(CGPoint(x: 0.0, y: CGFloat(y * phaseY)))
                             }
-                            
+
                             trans.pointValuesToPixel(&transformed)
-                            
+
                             for k in 0 ..< transformed.count
                             {
                                 let val = vals[k]
                                 let drawBelow = (val == 0.0 && negY == 0.0 && posY > 0.0) || val < 0.0
                                 let y = transformed[k].y + (drawBelow ? negOffset : posOffset)
-                                
+
                                 if !viewPortHandler.isInBoundsRight(x)
                                 {
                                     break
                                 }
-                                
+
                                 if !viewPortHandler.isInBoundsY(y) || !viewPortHandler.isInBoundsLeft(x)
                                 {
                                     continue
                                 }
-                                
+
                                 if dataSet.isDrawValuesEnabled
                                 {
                                     drawValue(
@@ -712,7 +715,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                         align: .center,
                                         color: dataSet.valueTextColorAt(index))
                                 }
-                                
+
                                 if let icon = e.icon, dataSet.isDrawIconsEnabled
                                 {
                                     ChartUtils.drawImage(
@@ -724,60 +727,60 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                                 }
                             }
                         }
-                        
+
                         bufferIndex = vals == nil ? (bufferIndex + 1) : (bufferIndex + vals!.count)
                     }
                 }
             }
         }
     }
-    
+
     /// Draws a value at the specified x and y position.
     @objc open func drawValue(context: CGContext, value: String, xPos: CGFloat, yPos: CGFloat, font: NSUIFont, align: NSTextAlignment, color: NSUIColor)
     {
         ChartUtils.drawText(context: context, text: value, point: CGPoint(x: xPos, y: yPos), align: align, attributes: [NSAttributedString.Key.font: font, NSAttributedString.Key.foregroundColor: color])
     }
-    
+
     open override func drawExtras(context: CGContext)
     {
-        
+
     }
-    
+
     open override func drawHighlighted(context: CGContext, indices: [Highlight])
     {
         guard
             let dataProvider = dataProvider,
             let barData = dataProvider.barData
             else { return }
-        
+
         context.saveGState()
-        
+
         var barRect = CGRect()
-        
+
         for high in indices
         {
             guard
                 let set = barData.getDataSetByIndex(high.dataSetIndex) as? IBarChartDataSet,
                 set.isHighlightEnabled
                 else { continue }
-            
+
             if let e = set.entryForXValue(high.x, closestToY: high.y) as? BarChartDataEntry
             {
                 if !isInBoundsX(entry: e, dataSet: set)
                 {
                     continue
                 }
-                
+
                 let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
-                
+
                 context.setFillColor(set.highlightColor.cgColor)
                 context.setAlpha(set.highlightAlpha)
-                
+
                 let isStack = high.stackIndex >= 0 && e.isStacked
-                
+
                 let y1: Double
                 let y2: Double
-                
+
                 if isStack
                 {
                     if dataProvider.isHighlightFullBarEnabled
@@ -788,7 +791,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                     else
                     {
                         let range = e.ranges?[high.stackIndex]
-                        
+
                         y1 = range?.from ?? 0.0
                         y2 = range?.to ?? 0.0
                     }
@@ -798,15 +801,15 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                     y1 = e.y
                     y2 = 0.0
                 }
-                
+
                 prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: barData.barWidth / 2.0, trans: trans, rect: &barRect)
-                
+
                 setHighlightDrawPos(highlight: high, barRect: barRect)
-                
+
                 context.fill(barRect)
             }
         }
-        
+
         context.restoreGState()
     }
 

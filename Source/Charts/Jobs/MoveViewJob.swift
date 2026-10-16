@@ -14,7 +14,7 @@ import CoreGraphics
 
 @objc(MoveChartViewJob)
 open class MoveViewJob: ViewPortJob
-{    
+{
     open override func doJob()
     {
         guard
@@ -22,12 +22,12 @@ open class MoveViewJob: ViewPortJob
             let transformer = transformer,
             let view = view
             else { return }
-        
+
         var pt = CGPoint(
             x: xValue,
             y: yValue
         )
-        
+
         transformer.pointValueToPixel(&pt)
         viewPortHandler.centerViewPort(pt: pt, chart: view)
     }

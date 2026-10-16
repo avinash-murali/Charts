@@ -10,6 +10,9 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 import CoreGraphics
 
 open class PieChartRenderer: DataRenderer
@@ -454,7 +457,7 @@ open class PieChartRenderer: DataRenderer
 
                         context.drawPath(using: CGPathDrawingMode.stroke)
                     }
-                    
+
                     if drawXOutside && drawYOutside
                     {
                         ChartUtils.drawText(

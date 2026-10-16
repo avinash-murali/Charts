@@ -34,21 +34,21 @@ open class RadarChartDataEntry: ChartDataEntry
         self.init(value: value)
         self.data = data
     }
-    
+
     // MARK: Data property accessors
-    
+
     @objc open var value: Double
     {
         get { return y }
         set { y = value }
     }
-    
+
     // MARK: NSCopying
-    
+
     open override func copy(with zone: NSZone? = nil) -> Any
     {
         let copy = super.copy(with: zone) as! RadarChartDataEntry
-        
+
         return copy
     }
 }

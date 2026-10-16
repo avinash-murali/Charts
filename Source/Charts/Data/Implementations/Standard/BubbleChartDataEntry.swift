@@ -2,7 +2,7 @@
 //  BubbleDataEntry.swift
 //  Charts
 //
-//  Bubble chart implementation: 
+//  Bubble chart implementation:
 //    Copyright 2015 Pierre-Marc Airoldi
 //    Licensed under Apache License 2.0
 //
@@ -16,12 +16,12 @@ open class BubbleChartDataEntry: ChartDataEntry
 {
     /// The size of the bubble.
     @objc open var size = CGFloat(0.0)
-    
+
     public required init()
     {
         super.init()
     }
-    
+
     /// - Parameters:
     ///   - x: The index on the x-axis.
     ///   - y: The value on the y-axis.
@@ -29,10 +29,10 @@ open class BubbleChartDataEntry: ChartDataEntry
     @objc public init(x: Double, y: Double, size: CGFloat)
     {
         super.init(x: x, y: y)
-        
+
         self.size = size
     }
-    
+
     /// - Parameters:
     ///   - x: The index on the x-axis.
     ///   - y: The value on the y-axis.
@@ -43,7 +43,7 @@ open class BubbleChartDataEntry: ChartDataEntry
         self.init(x: x, y: y, size: size)
         self.data = data
     }
-    
+
     /// - Parameters:
     ///   - x: The index on the x-axis.
     ///   - y: The value on the y-axis.
@@ -54,7 +54,7 @@ open class BubbleChartDataEntry: ChartDataEntry
         self.init(x: x, y: y, size: size)
         self.icon = icon
     }
-    
+
     /// - Parameters:
     ///   - x: The index on the x-axis.
     ///   - y: The value on the y-axis.
@@ -67,9 +67,9 @@ open class BubbleChartDataEntry: ChartDataEntry
         self.icon = icon
         self.data = data
     }
-    
+
     // MARK: NSCopying
-    
+
     open override func copy(with zone: NSZone? = nil) -> Any
     {
         let copy = super.copy(with: zone) as! BubbleChartDataEntry

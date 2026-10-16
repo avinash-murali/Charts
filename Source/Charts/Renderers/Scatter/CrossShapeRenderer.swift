@@ -22,10 +22,10 @@ open class CrossShapeRenderer : NSObject, IShapeRenderer
     {
         let shapeSize = dataSet.scatterShapeSize
         let shapeHalf = shapeSize / 2.0
-        
+
         context.setLineWidth(1.0)
         context.setStrokeColor(color.cgColor)
-        
+
         context.beginPath()
         context.move(to: CGPoint(x: point.x - shapeHalf, y: point.y))
         context.addLine(to: CGPoint(x: point.x + shapeHalf, y: point.y))

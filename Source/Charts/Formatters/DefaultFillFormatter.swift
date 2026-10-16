@@ -19,21 +19,21 @@ open class DefaultFillFormatter: NSObject, IFillFormatter
     public typealias Block = (
         _ dataSet: ILineChartDataSet,
         _ dataProvider: LineChartDataProvider) -> CGFloat
-    
+
     @objc open var block: Block?
-    
+
     public override init() { }
-    
+
     @objc public init(block: @escaping Block)
     {
         self.block = block
     }
-    
+
     @objc public static func with(block: @escaping Block) -> DefaultFillFormatter?
     {
         return DefaultFillFormatter(block: block)
     }
-    
+
     open func getFillLinePosition(
         dataSet: ILineChartDataSet,
         dataProvider: LineChartDataProvider) -> CGFloat

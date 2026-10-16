@@ -16,12 +16,12 @@ open class Range: NSObject
 {
     @objc open var from: Double
     @objc open var to: Double
-    
+
     @objc public init(from: Double, to: Double)
     {
         self.from = from
         self.to = to
-        
+
         super.init()
     }
 
@@ -39,12 +39,12 @@ open class Range: NSObject
             return false
         }
     }
-    
+
     @objc open func isLarger(_ value: Double) -> Bool
     {
         return value > to
     }
-    
+
     @objc open func isSmaller(_ value: Double) -> Bool
     {
         return value < from

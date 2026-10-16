@@ -25,7 +25,7 @@ open class DataRenderer: Renderer
     @objc final var accessibleChartElements: [NSUIAccessibilityElement] = []
 
     @objc public let animator: Animator
-    
+
     @objc public init(animator: Animator, viewPortHandler: ViewPortHandler)
     {
         self.animator = animator
@@ -37,17 +37,17 @@ open class DataRenderer: Renderer
     {
         fatalError("drawData() cannot be called on DataRenderer")
     }
-    
+
     @objc open func drawValues(context: CGContext)
     {
         fatalError("drawValues() cannot be called on DataRenderer")
     }
-    
+
     @objc open func drawExtras(context: CGContext)
     {
         fatalError("drawExtras() cannot be called on DataRenderer")
     }
-    
+
     /// Draws all highlight indicators for the values that are currently highlighted.
     ///
     /// - Parameters:
@@ -56,11 +56,11 @@ open class DataRenderer: Renderer
     {
         fatalError("drawHighlighted() cannot be called on DataRenderer")
     }
-    
+
     /// An opportunity for initializing internal buffers used for rendering with a new size.
     /// Since this might do memory allocations, it should only be called if necessary.
     @objc open func initBuffers() { }
-    
+
     @objc open func isDrawingValuesAllowed(dataProvider: ChartDataProvider?) -> Bool
     {
         guard let data = dataProvider?.data else { return false }

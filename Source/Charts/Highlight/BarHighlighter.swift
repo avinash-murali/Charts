@@ -21,7 +21,7 @@ open class BarHighlighter: ChartHighlighter
             let barData = (self.chart as? BarChartDataProvider)?.barData,
             let high = super.getHighlight(x: x, y: y)
             else { return nil }
-        
+
         let pos = getValsForTouch(x: x, y: y)
 
         if let set = barData.getDataSetByIndex(high.dataSetIndex) as? IBarChartDataSet,
@@ -37,17 +37,17 @@ open class BarHighlighter: ChartHighlighter
             return high
         }
     }
-    
+
     internal override func getDistance(x1: CGFloat, y1: CGFloat, x2: CGFloat, y2: CGFloat) -> CGFloat
     {
         return abs(x1 - x2)
     }
-    
+
     internal override var data: ChartData?
     {
         return (chart as? BarChartDataProvider)?.barData
     }
-    
+
     /// This method creates the Highlight object that also indicates which value of a stacked BarEntry has been selected.
     ///
     /// - Parameters:
@@ -65,13 +65,13 @@ open class BarHighlighter: ChartHighlighter
             let chart = self.chart as? BarLineScatterCandleBubbleChartDataProvider,
             let entry = set.entryForXValue(xValue, closestToY: yValue) as? BarChartDataEntry
             else { return nil }
-        
+
         // Not stacked
         if entry.yValues == nil
         {
             return high
         }
-        
+
         guard
             let ranges = entry.ranges,
             ranges.count > 0
@@ -90,7 +90,7 @@ open class BarHighlighter: ChartHighlighter
                          stackIndex: stackIndex,
                          axis: high.axis)
     }
-    
+
     /// - Parameters:
     ///   - entry:
     ///   - value:

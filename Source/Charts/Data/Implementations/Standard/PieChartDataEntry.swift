@@ -18,7 +18,7 @@ open class PieChartDataEntry: ChartDataEntry
     {
         super.init()
     }
-    
+
 
     /// - Parameters:
     ///   - value: The value on the y-axis
@@ -35,7 +35,7 @@ open class PieChartDataEntry: ChartDataEntry
         self.init(value: value)
         self.label = label
     }
-    
+
     /// - Parameters:
     ///   - value: The value on the y-axis
     ///   - label: The label for the x-axis
@@ -44,7 +44,7 @@ open class PieChartDataEntry: ChartDataEntry
     {
         self.init(value: value, label: label, icon: nil, data: data)
     }
-    
+
     /// - Parameters:
     ///   - value: The value on the y-axis
     ///   - label: The label for the x-axis
@@ -55,7 +55,7 @@ open class PieChartDataEntry: ChartDataEntry
         self.label = label
         self.icon = icon
     }
-    
+
     /// - Parameters:
     ///   - value: The value on the y-axis
     ///   - label: The label for the x-axis
@@ -77,7 +77,7 @@ open class PieChartDataEntry: ChartDataEntry
         self.init(value: value)
         self.data = data
     }
-    
+
     /// - Parameters:
     ///   - value: The value on the y-axis
     ///   - icon: icon image
@@ -86,7 +86,7 @@ open class PieChartDataEntry: ChartDataEntry
         self.init(value: value)
         self.icon = icon
     }
-    
+
     /// - Parameters:
     ///   - value: The value on the y-axis
     ///   - icon: icon image
@@ -97,19 +97,19 @@ open class PieChartDataEntry: ChartDataEntry
         self.icon = icon
         self.data = data
     }
-    
+
     // MARK: Data property accessors
-    
+
     @objc open var label: String?
-    
+
     @objc open var value: Double
     {
         get { return y }
         set { y = newValue }
     }
-        
+
     // MARK: NSCopying
-    
+
     open override func copy(with zone: NSZone? = nil) -> Any
     {
         let copy = super.copy(with: zone) as! PieChartDataEntry

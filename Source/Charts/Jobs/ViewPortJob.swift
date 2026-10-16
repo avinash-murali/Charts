@@ -22,7 +22,7 @@ open class ViewPortJob: NSObject
     internal var yValue: Double = 0.0
     internal weak var transformer: Transformer?
     internal weak var view: ChartViewBase?
-    
+
     @objc public init(
         viewPortHandler: ViewPortHandler,
         xValue: Double,
@@ -31,14 +31,14 @@ open class ViewPortJob: NSObject
         view: ChartViewBase)
     {
         super.init()
-        
+
         self.viewPortHandler = viewPortHandler
         self.xValue = xValue
         self.yValue = yValue
         self.transformer = transformer
         self.view = view
     }
-    
+
     @objc open func doJob()
     {
         fatalError("`doJob()` must be overridden by subclasses")

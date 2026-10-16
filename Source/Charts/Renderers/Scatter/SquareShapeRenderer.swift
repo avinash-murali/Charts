@@ -27,7 +27,7 @@ open class SquareShapeRenderer : NSObject, IShapeRenderer
         let shapeHoleColor = dataSet.scatterShapeHoleColor
         let shapeStrokeSize = (shapeSize - shapeHoleSize) / 2.0
         let shapeStrokeSizeHalf = shapeStrokeSize / 2.0
-        
+
         if shapeHoleSize > 0.0
         {
             context.setStrokeColor(color.cgColor)
@@ -38,7 +38,7 @@ open class SquareShapeRenderer : NSObject, IShapeRenderer
             rect.size.width = shapeHoleSize + shapeStrokeSize
             rect.size.height = shapeHoleSize + shapeStrokeSize
             context.stroke(rect)
-            
+
             if let shapeHoleColor = shapeHoleColor
             {
                 context.setFillColor(shapeHoleColor.cgColor)

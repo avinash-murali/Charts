@@ -24,7 +24,7 @@ open class ChartColorTemplates: NSObject
             NSUIColor(red: 42/255.0, green: 109/255.0, blue: 130/255.0, alpha: 1.0)
         ]
     }
-    
+
     @objc open class func joyful () -> [NSUIColor]
     {
         return [
@@ -35,7 +35,7 @@ open class ChartColorTemplates: NSObject
             NSUIColor(red: 53/255.0, green: 194/255.0, blue: 209/255.0, alpha: 1.0)
         ]
     }
-    
+
     @objc open class func pastel () -> [NSUIColor]
     {
         return [
@@ -46,7 +46,7 @@ open class ChartColorTemplates: NSObject
             NSUIColor(red: 179/255.0, green: 48/255.0, blue: 80/255.0, alpha: 1.0)
         ]
     }
-    
+
     @objc open class func colorful () -> [NSUIColor]
     {
         return [
@@ -57,7 +57,7 @@ open class ChartColorTemplates: NSObject
             NSUIColor(red: 179/255.0, green: 100/255.0, blue: 53/255.0, alpha: 1.0)
         ]
     }
-    
+
     @objc open class func vordiplom () -> [NSUIColor]
     {
         return [
@@ -68,7 +68,7 @@ open class ChartColorTemplates: NSObject
             NSUIColor(red: 255/255.0, green: 140/255.0, blue: 157/255.0, alpha: 1.0)
         ]
     }
-    
+
     @objc open class func material () -> [NSUIColor]
     {
         return [
@@ -78,14 +78,14 @@ open class ChartColorTemplates: NSObject
             NSUIColor(red: 52/255.0, green: 152/255.0, blue: 219/255.0, alpha: 1.0)
         ]
     }
-    
+
     @objc open class func colorFromString(_ colorString: String) -> NSUIColor
     {
         let leftParenCharset: CharacterSet = CharacterSet(charactersIn: "( ")
         let commaCharset: CharacterSet = CharacterSet(charactersIn: ", ")
 
         let colorString = colorString.lowercased()
-        
+
         if colorString.hasPrefix("#")
         {
             var argb: [UInt] = [255, 0, 0, 0]
@@ -93,10 +93,10 @@ open class ChartColorTemplates: NSObject
             var length = colorString.count
             var index = colorString.startIndex
             let endIndex = colorString.endIndex
-            
+
             index = colorString.index(after: index)
             length = length - 1
-            
+
             if length == 3 || length == 6 || length == 8
             {
                 var i = length == 8 ? 0 : 1
@@ -104,7 +104,7 @@ open class ChartColorTemplates: NSObject
                 {
                     var c = colorString[index]
                     index = colorString.index(after: index)
-                    
+
                     var val = (c.value >= 0x61 && c.value <= 0x66) ? (c.value - 0x61 + 10) : c.value - 0x30
                     argb[i] = UInt(val) * 16
                     if length == 3
@@ -115,15 +115,15 @@ open class ChartColorTemplates: NSObject
                     {
                         c = colorString[index]
                         index = colorString.index(after: index)
-                        
+
                         val = (c.value >= 0x61 && c.value <= 0x66) ? (c.value - 0x61 + 10) : c.value - 0x30
                         argb[i] = argb[i] + UInt(val)
                     }
-                    
+
                     i += 1
                 }
             }
-            
+
             return NSUIColor(red: CGFloat(argb[1]) / 255.0, green: CGFloat(argb[2]) / 255.0, blue: CGFloat(argb[3]) / 255.0, alpha: CGFloat(argb[0]) / 255.0)
         }
         else if colorString.hasPrefix("rgba")
@@ -192,7 +192,7 @@ open class ChartColorTemplates: NSObject
                 alpha: 1.0
             )
         }
-        
+
         return NSUIColor.clear
     }
 }

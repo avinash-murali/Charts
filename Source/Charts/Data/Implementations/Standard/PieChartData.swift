@@ -17,7 +17,7 @@ open class PieChartData: ChartData
     {
         super.init()
     }
-    
+
     public override init(dataSets: [IChartDataSet]?)
     {
         super.init(dataSets: dataSets)
@@ -55,7 +55,7 @@ open class PieChartData: ChartData
             }
         }
     }
-    
+
     open override func getDataSetByIndex(_ index: Int) -> IChartDataSet?
     {
         if index != 0
@@ -64,14 +64,14 @@ open class PieChartData: ChartData
         }
         return super.getDataSetByIndex(index)
     }
-    
+
     open override func getDataSetByLabel(_ label: String, ignorecase: Bool) -> IChartDataSet?
     {
         if dataSets.count == 0 || dataSets[0].label == nil
         {
             return nil
         }
-        
+
         if ignorecase
         {
             if let label = dataSets[0].label, label.caseInsensitiveCompare(label) == .orderedSame
@@ -88,17 +88,17 @@ open class PieChartData: ChartData
         }
         return nil
     }
-    
+
     open override func entryForHighlight(_ highlight: Highlight) -> ChartDataEntry?
     {
         return dataSet?.entryForIndex(Int(highlight.x))
     }
-    
+
     open override func addDataSet(_ d: IChartDataSet!)
-    {   
+    {
         super.addDataSet(d)
     }
-    
+
     /// Removes the DataSet at the given index in the DataSet array from the data object.
     /// Also recalculates all minimum and maximum values.
     ///
@@ -109,10 +109,10 @@ open class PieChartData: ChartData
         {
             return false
         }
-        
+
         return false
     }
-    
+
     /// The total y-value sum across all DataSet objects the this object represents.
     @objc open var yValueSum: Double
     {
